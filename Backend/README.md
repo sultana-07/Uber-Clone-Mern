@@ -338,3 +338,164 @@ The endpoint expects a JSON payload with the following structure:
 - New captains are registered with an initial status of "inactive"
 - The password is automatically hashed before storage
 - The vehicle type must be one of the predefined types: car, motorcycle, or auto
+
+# /captains/login Endpoint Documentation
+
+## Description
+
+The `/captains/login` endpoint authenticates existing captains using their email and password. Upon successful authentication, it returns a JWT token and captain details.
+
+## Endpoint
+
+**POST** `/captains/login`
+
+## Request Body
+
+The endpoint expects a JSON payload with the following structure:
+
+- **email** (String, required): Registered email address
+- **password** (String, required): Captain's password (min 6 characters)
+
+### Example Request Body
+
+```json
+{
+  "email": "john.driver@example.com",
+  "password": "password123"
+}
+```
+
+## Success Response
+
+- **Status Code:** 200 OK
+
+### Example Response
+
+```json
+{
+  "token": "your_jwt_token_here",
+  "captain": {
+    "_id": "unique_captain_id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.driver@example.com",
+    "vehicle": {
+      "color": "Black",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive"
+  }
+}
+```
+
+## Error Responses
+
+### Captain Not Found
+
+- **Status Code:** 400 Bad Request
+
+```json
+{
+  "error": "captain not found"
+}
+```
+
+### Invalid Password
+
+- **Status Code:** 400 Bad Request
+
+```json
+{
+  "error": "password is incorrect"
+}
+```
+
+# /captains/profile Endpoint Documentation
+
+## Description
+
+The `/captains/profile` endpoint retrieves the authenticated captain's profile information. This endpoint requires captain authentication via JWT token.
+
+## Endpoint
+
+**GET** `/captains/profile`
+
+## Authentication
+
+Requires a valid JWT token in one of these formats:
+
+- Cookie named 'token'
+- Authorization header: `Bearer <token>`
+
+## Success Response
+
+- **Status Code:** 200 OK
+
+### Example Response
+
+```json
+{
+  "captain": {
+    "_id": "unique_captain_id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.driver@example.com",
+    "vehicle": {
+      "color": "Black",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive"
+  }
+}
+```
+
+# /captains/logout Endpoint Documentation
+
+## Description
+
+The `/captains/logout` endpoint logs out the current captain by invalidating their JWT token and clearing the cookie.
+
+## Endpoint
+
+**GET** `/captains/logout`
+
+## Authentication
+
+Requires a valid JWT token in one of these formats:
+
+- Cookie named 'token'
+- Authorization header: `Bearer <token>`
+
+## Success Response
+
+- **Status Code:** 200 OK
+
+```json
+{
+  "message": "logout successfully"
+}
+```
+
+## Error Response
+
+- **Status Code:** 401 Unauthorized
+
+```json
+{
+  "error": "unauthorized"
+}
+```
+
+## Notes
+
+- The token is added to a blacklist to prevent reuse
+- The token cookie is cleared from the client
+- Blacklisted tokens expire after 24 hours
