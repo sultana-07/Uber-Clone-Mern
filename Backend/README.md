@@ -233,3 +233,108 @@ Requires a valid JWT token in one of these formats:
 - The token is added to a blacklist to prevent reuse
 - The token cookie is cleared from the client
 - Blacklisted tokens expire after 24 hours
+
+# /captains/register Endpoint Documentation
+
+## Description
+
+The `/captains/register` endpoint registers new captains (drivers) in the system. It validates the provided data, creates a new captain account with vehicle information, and returns an authentication token along with the created captain object.
+
+## Endpoint
+
+**POST** `/captains/register`
+
+## Request Body
+
+The endpoint expects a JSON payload with the following structure:
+
+- **fullname** (Object, required)
+  - **firstname** (String, required): Minimum 3 characters
+  - **lastname** (String, optional): Minimum 3 characters if provided
+- **email** (String, required): Valid email format
+- **password** (String, required): Minimum 6 characters
+- **vehicle** (Object, required)
+  - **color** (String, required): Minimum 3 characters
+  - **plate** (String, required): Minimum 3 characters
+  - **capacity** (Number, required): Minimum value of 1
+  - **vehicleType** (String, required): Must be one of: "car", "motorcycle", "auto"
+
+### Example Request Body
+
+```json
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.driver@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "Black",
+    "plate": "ABC123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+## Success Response
+
+- **Status Code:** 201 Created
+
+### Example Response
+
+```json
+{
+  "token": "your_jwt_token_here",
+  "captain": {
+    "_id": "unique_captain_id",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.driver@example.com",
+    "vehicle": {
+      "color": "Black",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    },
+    "status": "inactive"
+  }
+}
+```
+
+## Error Responses
+
+### Validation Error
+
+- **Status Code:** 400 Bad Request
+
+```json
+{
+  "error": [
+    {
+      "msg": "Please enter a valid email",
+      "param": "email",
+      "location": "body"
+    }
+  ]
+}
+```
+
+### Captain Already Exists
+
+- **Status Code:** 400 Bad Request
+
+```json
+{
+  "error": "captain already exist"
+}
+```
+
+## Notes
+
+- New captains are registered with an initial status of "inactive"
+- The password is automatically hashed before storage
+- The vehicle type must be one of the predefined types: car, motorcycle, or auto
