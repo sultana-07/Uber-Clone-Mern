@@ -1,32 +1,65 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { CaptainDataContext } from '../context/CaptainContext'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const CaptainSignup = () => {
 
-  const [firstname,setFirstname] = useState('')
+    const navigate = useNavigate()
+    const [firstname,setFirstname] = useState('')
     const [lastname,setLastname] = useState('')
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
-    const [userData,setUserData] = useState({})
   
-    const submitHandler = (e) => {
+
+    const [vehicleColor, setVehicleColor] = useState('')
+    const [vehiclePlate, setVehiclePlate] = useState('')
+    const [vehicleCapacity, setVehicleCapacity] = useState('')
+    const [vehicleType, setVehicleType] = useState('')
+
+    const {captain,setCaptain} = useContext(CaptainDataContext)
+  
+    const submitHandler = async (e) => {
       e.preventDefault();
        
-      setUserData({
+      const captainData = {
         fullname : {
           firstname : firstname,
           lastname : lastname,
         },
         email : email,
-        password : password
-      })
-      console.log(userData);
+        password : password,
+        vehicle : {
+          color : vehicleColor,
+          plate : vehiclePlate,
+          capacity : vehicleCapacity,
+          vehicleType : vehicleType
+        }
+      }
+
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`,captainData)
+
+      if(response.status === 201) {
+        const data = response.data
+        setCaptain(data.captain)
+        console.log(response.data.token);
+        
+        localStorage.setItem('token',data.token)
+        navigate('/captain-home')
+      };
+     
       
       setFirstname('')
       setLastname('')
       setEmail('')
       setPassword('')
-    }
+      setVehicleCapacity('')
+      setVehicleColor('')
+      setVehiclePlate('')
+      setVehicleType('')
+    };
+
   return (
     <div className='p-7 h-screen flex flex-col justify-between'>
     <div>
@@ -68,9 +101,58 @@ const CaptainSignup = () => {
       className= 'mb-5 bg-[#eeeeee] rounded px-4 py-2 border w-full text-lg placeholder:text-base'
       placeholder='enter your password' />
 
+      {/* demo */}
+
+     
+  
+    {/* Add Vehicle Information Section */}
+    <h3 className='text-lg font-medium mb-2'>Vehicle Information</h3>
+    
+    <div className='mb-5'>
+      <input 
+        type="text" 
+        value={vehicleColor}
+        onChange={(e) => setVehicleColor(e.target.value)}
+        className='mb-3 bg-[#eeeeee] rounded px-4 py-2 border w-full text-lg placeholder:text-base'
+        required
+        placeholder='Vehicle Color' />
+
+      <input 
+        type="text" 
+        value={vehiclePlate}
+        onChange={(e) => setVehiclePlate(e.target.value)}
+        className='mb-3 bg-[#eeeeee] rounded px-4 py-2 border w-full text-lg placeholder:text-base'
+        required
+        placeholder='License Plate Number' />
+
+      <input 
+        type="number" 
+        value={vehicleCapacity}
+        onChange={(e) => setVehicleCapacity(e.target.value)}
+        className='mb-3 bg-[#eeeeee] rounded px-4 py-2 border w-full text-lg placeholder:text-base'
+        required
+        min="1"
+        placeholder='Vehicle Capacity' />
+
+      <select 
+        value={vehicleType}
+        onChange={(e) => setVehicleType(e.target.value)}
+        className='mb-3 bg-[#eeeeee] rounded px-4 py-2 border w-full text-lg'
+        required>
+        <option value="">Select Vehicle Type</option>
+        <option value="car">Car</option>
+        <option value="motorcycle">Motorcycle</option>
+        <option value="auto">Auto</option>
+      </select>
+    </div>
+
+  
+
+      {/* demo */}
+
       <button
         className= 'mb-3 bg-[#111] text-white font-semibold rounded px-4 py-2  w-full text-lg placeholder:text-base'
-      >Register</button> 
+      >Register as Captain</button> 
      
     </form>
     <p className='text-center'>Already have a Account ? <Link to='/captain-login' className='text-blue-500'>Login here</Link></p>
