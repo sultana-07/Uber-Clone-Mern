@@ -1,4 +1,5 @@
 import React from 'react'
+import 'remixicon/fonts/remixicon.css'
 
 const LookingForDriver = ({setVehicleFound,setConfirmRidePanel}) => {
   return (
@@ -7,8 +8,8 @@ const LookingForDriver = ({setVehicleFound,setConfirmRidePanel}) => {
        onClick={() =>{ setVehicleFound(false)
          setConfirmRidePanel(false) 
        }}
-        className='absolute opacity-0 right-6 top-6 text-3xl'>
-       <i className="text-black ri-arrow-down-wide-line"></i>
+        className='absolute  right-6 top-6 text-3xl'>
+       <i className="ri-arrow-down-wide-line"></i>
        </h5>
 
        <h3 className='font-semibold text-2xl mb-5'>Looking for a Driver</h3>

@@ -499,3 +499,170 @@ Requires a valid JWT token in one of these formats:
 - The token is added to a blacklist to prevent reuse
 - The token cookie is cleared from the client
 - Blacklisted tokens expire after 24 hours
+
+# Maps API Endpoints Documentation
+
+## GET /maps/address
+
+### Description
+
+Gets coordinates for a given address using Google Maps Geocoding API.
+
+### Query Parameters
+
+- **address** (String, required): Address to geocode
+
+### Authentication
+
+Requires user authentication token
+
+### Success Response
+
+- **Status Code:** 200 OK
+
+```json
+{
+  "lat": 12.3456,
+  "lng": 78.9012
+}
+```
+
+### Error Response
+
+- **Status Code:** 400 Bad Request
+
+```json
+{
+  "error": [
+    {
+      "msg": "Address is required",
+      "param": "address",
+      "location": "query"
+    }
+  ]
+}
+```
+
+## GET /maps/distance
+
+### Description
+
+Calculates distance and time between two locations using Google Maps Distance Matrix API.
+
+### Query Parameters
+
+- **origin** (String, required): Starting location
+- **destination** (String, required): Ending location
+
+### Authentication
+
+Requires user authentication token
+
+### Success Response
+
+- **Status Code:** 200 OK
+
+```json
+{
+  "distance": {
+    "text": "5.2 km",
+    "value": 5200
+  },
+  "duration": {
+    "text": "12 mins",
+    "value": 720
+  }
+}
+```
+
+## GET /maps/suggestions
+
+### Description
+
+Gets address suggestions based on input text using Google Places Autocomplete API.
+
+### Query Parameters
+
+- **input** (String, required): Minimum 3 characters to search
+
+### Authentication
+
+Requires user authentication token
+
+### Success Response
+
+- **Status Code:** 200 OK
+
+```json
+{
+  "predictions": [
+    {
+      "description": "Times Square, New York, NY, USA",
+      "place_id": "ChIJmQJIxlVYwokRLgeuocVOGVU"
+    }
+  ]
+}
+```
+
+# Rides API Endpoints Documentation
+
+## POST /rides/create
+
+### Description
+
+Creates a new ride request with fare calculation.
+
+### Authentication
+
+Requires user authentication token
+
+### Request Body
+
+```json
+{
+  "pickup": "Starting location",
+  "destination": "Ending location",
+  "vehicleType": "car" // Options: "car", "auto", "motorcycle"
+}
+```
+
+### Success Response
+
+- **Status Code:** 201 Created
+
+```json
+{
+  "_id": "ride_id",
+  "user": "user_id",
+  "pickup": "Starting location",
+  "destination": "Ending location",
+  "fare": 150.5,
+  "status": "pending",
+  "otp": "123456"
+}
+```
+
+### Error Response
+
+- **Status Code:** 400 Bad Request
+
+```json
+{
+  "errors": [
+    {
+      "msg": "invalid pickup location",
+      "param": "pickup",
+      "location": "body"
+    }
+  ]
+}
+```
+
+### Notes
+
+- Fare calculation includes:
+  - Base fare (Auto: ₹30, Car: ₹50, Motorcycle: ₹20)
+  - Per km rate (Auto: ₹10/km, Car: ₹15/km, Motorcycle: ₹8/km)
+  - Per minute rate (Auto: ₹2/min, Car: ₹3/min, Motorcycle: ₹1.5/min)
+- Ride status can be: pending, accepted, ongoing, completed, cancelled
+- A 6-digit OTP is generated for ride verification

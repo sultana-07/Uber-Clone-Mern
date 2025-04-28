@@ -1,20 +1,31 @@
 import React from 'react'
 import 'remixicon/fonts/remixicon.css'
-
-const ConfirmRide = ({setVehicleFound,setConfirmRidePanel}) => {
+const RidePopUp = ({setRidePopUpPanel,setConfirmRidePanel}) => {
   return (
     <div>
-        <h5 
-           onClick={() => setConfirmRidePanel(false)}
-            className='absolute  right-6 top-6 text-3xl'
-            >
+      <h5 
+           onClick={() => 
+            {
+                setRidePopUpPanel(false)
+                
+
+           }}
+            className='absolute right-6 top-6 text-3xl '>
            <i className="ri-arrow-down-wide-line"></i>
            </h5>
 
-           <h3 className='font-semibold text-2xl mb-5'>Confirm your Ride</h3>
+           <h3 className='font-semibold text-2xl mb-5'> New Ride Avaliable</h3>
+
+           <div className='flex justify-between items-center bg-yellow-400 rounded-lg p-3 mt-4 mb-3'> 
+            <div className='flex items-center  gap-4  '>
+            <img className='h-12 w-12 rounded-full object-cover' src="https://subpng.com/images/hd/casual-random-person-portrait-png-wxb89-8b2q9aafvn0s792w.jpg" alt="" />
+            <h2 className='text-xl font-mediun'>sultan ali</h2>
+            </div>
+            <h5 className='text-lg font-semibold'>2.4 KM</h5>
+           </div>
 
            <div className='flex flex-col justify-center items-center'>
-            <img src="https://th.bing.com/th/id/OIP.ymjpxr4RPlwbLenCbbpYywHaE7?rs=1&pid=ImgDetMain" alt="" />
+           
 
             <div className='w-full flex flex-col gap-5'>
                
@@ -49,15 +60,23 @@ const ConfirmRide = ({setVehicleFound,setConfirmRidePanel}) => {
 
             <button 
             onClick={() =>{ 
-                setVehicleFound(true)
-                setConfirmRidePanel(false)
+                setRidePopUpPanel(false)
+                setConfirmRidePanel(true)
             }}
                 
-            className='w-full bg-green-500 text-white font-semibold rounded-lg p-2'>Confirm</button>
+            className='w-full bg-green-500 mb-2 text-white font-semibold rounded-lg p-2'>Accept</button>
+
+            <button 
+            onClick={() =>{ 
+                setRidePopUpPanel(false)
+                
+            }}
+                
+            className='w-full bg-gray-300  text-gray-700 font-semibold rounded-lg p-2'>Ignore</button>
 
            </div>
     </div>
   )
 }
 
-export default ConfirmRide
+export default RidePopUp

@@ -1,20 +1,29 @@
-import React from 'react'
-import 'remixicon/fonts/remixicon.css'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
-const ConfirmRide = ({setVehicleFound,setConfirmRidePanel}) => {
+const ConfirmRidePopUp = ({setConfirmRidePanel}) => {
+
+    const [opt,setopt] = useState('')
+
+    const submithandler = (e) => {
+        e.preventDefault();
+    }
   return (
     <div>
-        <h5 
-           onClick={() => setConfirmRidePanel(false)}
-            className='absolute  right-6 top-6 text-3xl'
-            >
-           <i className="ri-arrow-down-wide-line"></i>
-           </h5>
+    
 
-           <h3 className='font-semibold text-2xl mb-5'>Confirm your Ride</h3>
+           <h3 className='font-semibold text-2xl mb-5'>Confirm this Ride to Start</h3>
+
+           <div className='flex justify-between items-center bg-yellow-400 rounded-lg p-3 mt-4 mb-3'> 
+            <div className='flex items-center  gap-4  '>
+            <img className='h-12 w-12 rounded-full object-cover' src="https://subpng.com/images/hd/casual-random-person-portrait-png-wxb89-8b2q9aafvn0s792w.jpg" alt="" />
+            <h2 className='text-xl font-mediun'>sultan ali</h2>
+            </div>
+            <h5 className='text-lg font-semibold'>2.2 KM</h5>
+           </div>
 
            <div className='flex flex-col justify-center items-center'>
-            <img src="https://th.bing.com/th/id/OIP.ymjpxr4RPlwbLenCbbpYywHaE7?rs=1&pid=ImgDetMain" alt="" />
+           
 
             <div className='w-full flex flex-col gap-5'>
                
@@ -46,18 +55,40 @@ const ConfirmRide = ({setVehicleFound,setConfirmRidePanel}) => {
                
                
             </div>
+            
+          
+            <div className='mt-6 w-full'>
+                <form onSubmit={() => {
+                    submithandler
+                }}>
 
-            <button 
-            onClick={() =>{ 
-                setVehicleFound(true)
+                 <input 
+                 value={opt}
+                 onChange={(e) => setopt(e.target.value)}
+                 className='bg-[#eee] px-8 py-2 text-base rounded-lg w-full mb-3'
+                 type="text" placeholder='enter opt' />   
+
+
+                <Link to='/captain-riding'
+                onClick={() =>{ 
+               
                 setConfirmRidePanel(false)
             }}
                 
-            className='w-full bg-green-500 text-white font-semibold rounded-lg p-2'>Confirm</button>
+            className='flex justify-center w-full bg-green-500 mb-2 text-white font-semibold rounded-lg p-2'>Confirm</Link>
+
+            <button 
+            onClick={() =>{ 
+                setConfirmRidePanel(false)
+            }}
+                
+            className='w-full bg-red-500  text-white font-semibold rounded-lg p-2'>Cancle</button>
+                </form>
+            </div>
 
            </div>
     </div>
   )
 }
 
-export default ConfirmRide
+export default ConfirmRidePopUp
