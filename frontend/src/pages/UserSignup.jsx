@@ -31,7 +31,7 @@ const UserSignup = () => {
 
     if(response.status === 201){
       const data = response.data
-      console.log(data);
+      console.log("data" + data);
       
 
       setUser(data.user)
