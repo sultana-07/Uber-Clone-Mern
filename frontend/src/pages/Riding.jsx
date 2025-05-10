@@ -59,7 +59,7 @@ const Riding = () => {
 
             
            <div className='flex items-center gap-5 mb-3 p-2 border-b-1'>
-               <h2 className='bg-[#eee] h-10 flex items-center justify-center w-12'><i class="ri-money-rupee-circle-line"></i></h2>
+               <h2 className='bg-[#eee] h-10 flex items-center justify-center w-12'><i className="ri-money-rupee-circle-line"></i></h2>
                <div>
                   <h3 className='text-lg font-medium'>{rideData?.fare}</h3>
                   <p className='text-base -mt-1 text-gray-600'>Cash Cash</p>
